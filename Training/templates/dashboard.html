@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="page-heading">
+
+    <h1>
+
+        Welcome, {{ user.username }}
+
+    </h1>
+
+    <p>
+
+        Freshers Training Progress Dashboard
+
+    </p>
+
+</div>
+
+
+<div class="cards">
+
+
+    <div class="card">
+
+        <h2>
+
+            {{ freshers }}
+
+        </h2>
+
+        <p>
+
+            Total Freshers
+
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>
+
+            {{ progress }}
+
+        </h2>
+
+        <p>
+
+            Daily Progress Updates
+
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>
+
+            {{ assignments }}
+
+        </h2>
+
+        <p>
+
+            Assignments
+
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>
+
+            {{ projects }}
+
+        </h2>
+
+        <p>
+
+            Projects
+
+        </p>
+
+    </div>
+
+
+</div>
+
+
+<div class="welcome-box">
+
+    <h2>
+
+        Training Portal
+
+    </h2>
+
+    <p>
+
+        Use the navigation menu to register freshers,
+        add daily progress, submit assignments,
+        and update project details.
+
+    </p>
+
+</div>
+
+
+{% endblock %}

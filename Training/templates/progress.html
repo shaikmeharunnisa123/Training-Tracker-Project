@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="form-container">
+
+
+    <h1>
+
+        Daily Learning Progress
+
+    </h1>
+
+
+    <p>
+
+        Enter the fresher's daily training update.
+
+    </p>
+
+
+    <form method="POST">
+
+
+        {% csrf_token %}
+
+
+        {{ form.as_p }}
+
+
+        <button type="submit">
+
+            Save Progress
+
+        </button>
+
+
+    </form>
+
+
+</div>
+
+
+{% endblock %}

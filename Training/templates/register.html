@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="form-container">
+
+
+    <h1>
+
+        Fresher Registration
+
+    </h1>
+
+
+    <p>
+
+        Enter the new fresher's information.
+
+    </p>
+
+
+    <form method="POST">
+
+
+        {% csrf_token %}
+
+
+        {{ form.as_p }}
+
+
+        <button type="submit">
+
+            Register Fresher
+
+        </button>
+
+
+    </form>
+
+
+</div>
+
+
+{% endblock %}

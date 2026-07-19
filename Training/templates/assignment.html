@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="form-container">
+
+
+    <h1>
+
+        Assignment Submission
+
+    </h1>
+
+
+    <p>
+
+        Add the fresher's assignment details.
+
+    </p>
+
+
+    <form method="POST">
+
+
+        {% csrf_token %}
+
+
+        {{ form.as_p }}
+
+
+        <button type="submit">
+
+            Submit Assignment
+
+        </button>
+
+
+    </form>
+
+
+</div>
+
+
+{% endblock %}
