@@ -173,24 +173,6 @@ def register(request):
 
     form = FresherForm()
 
-    # if form.is_valid():
-
-    #     fresher = form.save()
-
-    #     freshers_collection.insert_one({
-    #         "employee_id": fresher.employee_id,
-    #         "name": fresher.name,
-    #         "email": fresher.email,
-    #         "phone": fresher.phone,
-    #         "technology": fresher.technology,
-    #         "batch": fresher.batch,
-    #         "joining_date": str(fresher.joining_date),
-    #     })
-
-    #     return redirect("dashboard")
-
-    # print(form.errors)   # <-- Add this line , To review errors
-
     return render(
         request,
         "register.html",
@@ -365,7 +347,7 @@ class ProjectAPI(
 # ==================================
 
 @api_view(
-    ["GET", "POST"]
+    ["GET", "POST", "PUT", "DELETE"]
 )
 def mongo_fresher_api(request):
 
@@ -376,61 +358,30 @@ def mongo_fresher_api(request):
     if request.method == "POST":
 
         fresher_data = {
+            "employee_id":request.data.get("employee_id"),
+            "name":request.data.get("name"),
+            "email":request.data.get("email"),
 
-            "employee_id":
-                request.data.get(
-                    "employee_id"
-                ),
+            "phone":request.data.get("phone"),
 
-            "name":
-                request.data.get(
-                    "name"
-                ),
+            "technology":request.data.get("technology"),
 
-            "email":
-                request.data.get(
-                    "email"
-                ),
+            "batch":request.data.get("batch"),
 
-            "phone":
-                request.data.get(
-                    "phone"
-                ),
-
-            "technology":
-                request.data.get(
-                    "technology"
-                ),
-
-            "batch":
-                request.data.get(
-                    "batch"
-                ),
-
-            "joining_date":
-                request.data.get(
-                    "joining_date"
-                ),
+            "joining_date":request.data.get("joining_date"),
 
         }
 
 
         # Insert the record into MongoDB
 
-        result = (
-            freshers_collection
-            .insert_one(
-                fresher_data
-            )
-        )
+        result = (freshers_collection.insert_one(fresher_data))
 
 
         # Convert MongoDB ObjectId
         # into a normal JSON string
 
-        mongodb_id = str(
-            result.inserted_id
-        )
+        mongodb_id = str(result.inserted_id)
 
 
         # MongoDB automatically adds
@@ -469,27 +420,101 @@ def mongo_fresher_api(request):
     # ------------------------------
     # GET REQUEST
     # ------------------------------
+    if request.method == "GET":
+        freshers = []
 
-    freshers = []
+        # Retrieve all MongoDB records
+        for fresher in (
 
-    # Retrieve all MongoDB records
-    for fresher in (
+            freshers_collection.find()
 
-        freshers_collection.find()
+        ):
 
-    ):
+            # Convert MongoDB ObjectId
+            # before returning JSON
 
-        # Convert MongoDB ObjectId
-        # before returning JSON
+            fresher["_id"] = str(fresher["_id"] )
+            freshers.append(fresher)
 
-        fresher["_id"] = str(fresher["_id"] )
-        freshers.append(fresher)
+        return Response(
 
-    return Response(
+            freshers,
 
-        freshers,
+            status=
+                status.HTTP_200_OK,
 
-        status=
-            status.HTTP_200_OK,
+        )
+    
+    # ------------------------------
+        # PUT REQUEST
+        # ------------------------------
 
-    )
+    if request.method == "PUT":
+
+            employee_id = request.data.get("employee_id")
+
+            updated_data = {
+
+                "name": request.data.get("name"),
+
+                "email": request.data.get("email"),
+
+                "phone": request.data.get("phone"),
+
+                "technology": request.data.get("technology"),
+
+                "batch": request.data.get("batch"),
+
+                "joining_date": request.data.get("joining_date"),
+
+            }
+
+            result = freshers_collection.update_one(
+
+                {"employee_id": employee_id},
+
+                {"$set": updated_data}
+
+            )
+
+            if result.modified_count > 0:
+
+                return Response({
+
+                    "message": "Fresher updated successfully"
+
+                })
+
+            return Response({
+
+                "message": "No changes made"
+
+            })
+            
+    # ------------------------------
+# DELETE REQUEST
+# ------------------------------
+
+    if request.method == "DELETE":
+
+        employee_id = request.data.get("employee_id")
+
+        result = freshers_collection.delete_one({
+
+            "employee_id": employee_id
+
+        })
+
+        if result.deleted_count > 0:
+
+            return Response({
+
+                "message": "Fresher deleted successfully"
+
+            })
+
+        return Response({
+
+            "message": "Fresher not found"
+
+        })

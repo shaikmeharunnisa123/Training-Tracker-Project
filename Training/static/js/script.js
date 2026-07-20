@@ -113,15 +113,21 @@ alert(result.message);
             let table = `
                         <h2>Fresher Details</h2>
 
-                        <table border="1">
-
+                        <table class= "data-table">
+                        <thead>
                         <tr>
                             <th>Employee ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Technology</th>
                             <th>Batch</th>
-                        </tr>`;
+                            <th>Joining Date</th>
+                            <th></th>
+                            
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>`;
             
                 freshers.forEach(function(fresher){
 
@@ -132,12 +138,36 @@ alert(result.message);
                                     <td>${fresher.email}</td>
                                     <td>${fresher.technology}</td>
                                     <td>${fresher.batch}</td>
+                                    <td>${fresher.joining_date}</td>
+                                    
+
+                                    <td class="action-buttons">
+
+                                            <td>
+
+                                            <button onclick="editFresher('${fresher.employee_id}')">
+
+                                            Edit
+
+                                            </button>
+
+                                            <button onclick="deleteFresher('${fresher.employee_id}')">
+
+                                            Delete
+
+                                            </button>
+
+                                                </td>
+                                            
+
+                                    </td>
                                 </tr>
                                 `;
 
                                 });
 
-                table += "</table>";
+                table += `
+                </tbody></table>`;
                 container.innerHTML = table;
 
         });
@@ -145,5 +175,90 @@ alert(result.message);
 
 
     }
-
 });
+
+ async function deleteFresher(employeeId){
+
+    if(!confirm("Delete this fresher?")){
+
+        return;
+
+    }
+
+    const response = await fetch("/api/mongo/freshers/",{
+
+        method:"DELETE",
+
+        headers:{
+
+            "Content-Type":"application/json",
+
+            "X-CSRFToken":csrftoken
+
+        },
+
+        body:JSON.stringify({
+
+            employee_id:employeeId
+
+        })
+
+    });
+
+    const result = await response.json();
+
+    alert(result.message);
+
+}
+
+async function editFresher(employeeId) {
+
+    const name = prompt("Enter Name");
+
+    const email = prompt("Enter Email");
+
+    const phone = prompt("Enter Phone");
+
+    const technology = prompt("Enter Technology");
+
+    const batch = prompt("Enter Batch");
+
+    const joining_date = prompt("Enter Joining Date (YYYY-MM-DD)");
+
+    const response = await fetch("/api/mongo/freshers/", {
+
+        method: "PUT",
+
+        headers: {
+
+            "Content-Type": "application/json",
+
+            "X-CSRFToken": csrftoken
+
+        },
+
+        body: JSON.stringify({
+
+            employee_id: employeeId,
+
+            name: name,
+
+            email: email,
+
+            phone: phone,
+
+            technology: technology,
+
+            batch: batch,
+
+            joining_date: joining_date
+
+        })
+
+    });
+
+    const result = await response.json();
+
+    alert(result.message);
+
+}
