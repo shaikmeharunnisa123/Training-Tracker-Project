@@ -43,6 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("DOM Loaded");
 
+    // ==========REGISTER FORM ============
+
     const registerForm = document.getElementById("registerForm");
 
     console.log(registerForm);
@@ -89,6 +91,58 @@ alert(result.message);
     } else {
 
         console.log("Register form NOT found");
+
+    }
+
+
+    //======== DASHBOARD PAGE ========
+
+    const fresherCard = document.getElementById("freshersCard");
+    if (freshersCard) {
+
+        freshersCard.addEventListener("click", async function () {
+
+            console.log("Freshers card clicked");
+
+            const response = await fetch("/api/mongo/freshers/");
+
+            const freshers = await response.json();
+
+            console.log(freshers);
+            const container = document.getElementById("freshersContainer");
+            let table = `
+                        <h2>Fresher Details</h2>
+
+                        <table border="1">
+
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Technology</th>
+                            <th>Batch</th>
+                        </tr>`;
+            
+                freshers.forEach(function(fresher){
+
+                                table += `
+                                <tr>
+                                    <td>${fresher.employee_id}</td>
+                                    <td>${fresher.name}</td>
+                                    <td>${fresher.email}</td>
+                                    <td>${fresher.technology}</td>
+                                    <td>${fresher.batch}</td>
+                                </tr>
+                                `;
+
+                                });
+
+                table += "</table>";
+                container.innerHTML = table;
+
+        });
+
+
 
     }
 

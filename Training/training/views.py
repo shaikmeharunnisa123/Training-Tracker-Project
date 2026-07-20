@@ -472,9 +472,7 @@ def mongo_fresher_api(request):
 
     freshers = []
 
-
     # Retrieve all MongoDB records
-
     for fresher in (
 
         freshers_collection.find()
@@ -484,19 +482,8 @@ def mongo_fresher_api(request):
         # Convert MongoDB ObjectId
         # before returning JSON
 
-        fresher["_id"] = str(
-
-            fresher["_id"]
-
-        )
-
-
-        freshers.append(
-
-            fresher
-
-        )
-
+        fresher["_id"] = str(fresher["_id"] )
+        freshers.append(fresher)
 
     return Response(
 
