@@ -1,5 +1,6 @@
 # DJANGO IMPORTS
 
+
 from django.shortcuts import (
     render,
     redirect,
@@ -143,7 +144,7 @@ def dashboard(request):
     data = {
 
         "freshers":
-            Fresher.objects.count(),
+            freshers_collection.count_documents({}),
 
         "progress":
             DailyProgress.objects.count(),
@@ -170,25 +171,25 @@ def dashboard(request):
 @login_required
 def register(request):
 
-    form = FresherForm(request.POST or None)
+    form = FresherForm()
 
-    if form.is_valid():
+    # if form.is_valid():
 
-        fresher = form.save()
+    #     fresher = form.save()
 
-        freshers_collection.insert_one({
-            "employee_id": fresher.employee_id,
-            "name": fresher.name,
-            "email": fresher.email,
-            "phone": fresher.phone,
-            "technology": fresher.technology,
-            "batch": fresher.batch,
-            "joining_date": str(fresher.joining_date),
-        })
+    #     freshers_collection.insert_one({
+    #         "employee_id": fresher.employee_id,
+    #         "name": fresher.name,
+    #         "email": fresher.email,
+    #         "phone": fresher.phone,
+    #         "technology": fresher.technology,
+    #         "batch": fresher.batch,
+    #         "joining_date": str(fresher.joining_date),
+    #     })
 
-        return redirect("dashboard")
+    #     return redirect("dashboard")
 
-    print(form.errors)   # <-- Add this line , To review errors
+    # print(form.errors)   # <-- Add this line , To review errors
 
     return render(
         request,
